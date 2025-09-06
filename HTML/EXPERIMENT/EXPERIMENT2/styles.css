@@ -1,0 +1,73 @@
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #ffecd2, #fcb69f);
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+}
+
+
+.container {
+background: #fff;
+padding: 40px;
+border-radius: 15px;
+box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+text-align: center;
+animation: fadeIn 1.5s ease-in-out;
+}
+
+
+h1 {
+font-size: 2.5em;
+margin-bottom: 20px;
+color: #333;
+text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.city-list {
+list-style-position: inside;
+padding: 0;
+margin: 0;
+}
+
+
+.city-list li {
+margin: 15px 0;
+font-size: 1.4em;
+padding: 10px 20px;
+border-radius: 10px;
+transition: all 0.3s ease;
+cursor: pointer;
+background: linear-gradient(45deg, #6dd5ed, #2193b0);
+color: white;
+box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+
+.city-list li:hover {
+transform: scale(1.08) rotate(-1deg);
+background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+
+.city-list li:nth-child(even) {
+background: linear-gradient(45deg, #a1c4fd, #c2e9fb);
+color: #333;
+}
+
+
+.city-list li:nth-child(even):hover {
+background: linear-gradient(45deg, #fbc2eb, #a6c1ee);
+color: #111;
+}
+
+
+@keyframes fadeIn {
+from {opacity: 0; transform: translateY(-20px);}
+to {opacity: 1; transform: translateY(0);}
+}
