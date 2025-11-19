@@ -1,79 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Task Manager</title>
+    <title>To-Do List</title>
     <style>
-        body{
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-        li{
-            margin: 5px 0;
-        }
-        button{
-            margin-left: 10px;
-        }
+        body { font-family: Arial; margin: 30px; }
+        button { margin-left: 10px; }
+        li { margin: 8px 0; }
     </style>
 </head>
 <body>
 
-    <h2>Task List</h2>
+    <h2>Dynamic To-Do List</h2>
 
-    <input type="text" id="taskInput" placeholder="Enter Task">
+    <input type="text" id="taskInput" placeholder="Enter task">
     <button id="addBtn">Add Task</button>
 
     <ul id="taskList"></ul>
 
     <script>
-        let taskList = document.getElementById("taskList");
-        let taskInput = document.getElementById("taskInput");
+        const input = document.getElementById("taskInput");
+        const addBtn = document.getElementById("addBtn");
+        const taskList = document.getElementById("taskList");
 
-        // Load tasks from localStorage
-        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        addBtn.addEventListener("click", addTask);
 
-        // Display tasks on page load
-        tasks.forEach(showTask);
+        function addTask() {
+            const taskText = input.value.trim();
+            if (taskText === "") return;
 
-        document.getElementById("addBtn").addEventListener("click", function() {
-            let taskText = taskInput.value.trim();
-            if(taskText === "") return;
+            createTaskElement(taskText);
+            input.value = "";
+        }
 
-            tasks.push(taskText);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-            showTask(taskText);
+        
+        function createTaskElement(text) {
+            const li = document.createElement("li");
 
-            taskInput.value = "";
-        });
+            const span = document.createElement("span");
+            span.textContent = text;
 
-        function showTask(taskText){
-            let li = document.createElement("li");
-            li.textContent = taskText;
-
-            // Edit Button
-            let editBtn = document.createElement("button");
+            
+            const editBtn = document.createElement("button");
             editBtn.textContent = "Edit";
-            editBtn.onclick = function(){
-                let newText = prompt("Edit task:", taskText);
-                if(newText){
-                    li.firstChild.textContent = newText;
-                    let index = tasks.indexOf(taskText);
-                    tasks[index] = newText;
-                    localStorage.setItem("tasks", JSON.stringify(tasks));
-                    taskText = newText;
+            editBtn.onclick = function () {
+                const newText = prompt("Edit task:", span.textContent);
+                if (newText) {
+                    span.textContent = newText;
                 }
             };
 
-            // Delete Button
-            let delBtn = document.createElement("button");
+            
+            const delBtn = document.createElement("button");
             delBtn.textContent = "Delete";
-            delBtn.onclick = function(){
+            delBtn.onclick = function () {
                 taskList.removeChild(li);
-                tasks = tasks.filter(t => t !== taskText);
-                localStorage.setItem("tasks", JSON.stringify(tasks));
             };
 
+            li.appendChild(span);
             li.appendChild(editBtn);
             li.appendChild(delBtn);
+
             taskList.appendChild(li);
         }
     </script>
