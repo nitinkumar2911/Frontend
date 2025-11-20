@@ -1,68 +1,93 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>To-Do List</title>
-    <style>
-        body { font-family: Arial; margin: 30px; }
-        button { margin-left: 10px; }
-        li { margin: 8px 0; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Live Character Counter</title>
+  <style>
+    :root{
+      --max-chars: 100;
+    }
+    body{ font-family: system-ui, -apple-system,Segoe UI, Roboto, "Helvetica Neue", Arial; padding: 24px; }
+    .container{ max-width:600px; margin:0 auto; }
+    textarea{ width:100%; min-height:140px; padding:12px; font-size:16px; box-sizing:border-box; border-radius:8px; border:1px solid #ccc; resize:vertical; }
+    .status{ display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+    .counter{ font-weight:600; padding:6px 10px; border-radius:999px; transition: background-color 180ms ease, color 180ms ease; }
+    .counter.green{ background:#e6ffed; color:#006400; }
+    .counter.orange{ background:#fff5e6; color:#b35700; }
+    .counter.red{ background:#ffe6e6; color:#b30000; }
+    .hint{ font-size:13px; color:#555; }
+    .visually-hidden{ position:absolute!important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+  </style>
 </head>
 <body>
+  <main class="container">
+    <h1>Live Character Counter</h1>
 
-    <h2>Dynamic To-Do List</h2>
+    <label for="message">Your message</label>
+    <textarea id="message" name="message" aria-describedby="charHint charLive" maxlength="100" ></textarea>
 
-    <input type="text" id="taskInput" placeholder="Enter task">
-    <button id="addBtn">Add Task</button>
+    <div class="status">
+      <div id="charHint" class="hint">Limit: <strong>100</strong> characters</div>
+      <div id="counter" class="counter green" aria-live="polite" role="status">Characters left: 100</div>
+    </div>
 
-    <ul id="taskList"></ul>
+    
+    <div id="charLive" class="visually-hidden" aria-live="polite"></div>
 
-    <script>
-        const input = document.getElementById("taskInput");
-        const addBtn = document.getElementById("addBtn");
-        const taskList = document.getElementById("taskList");
+  </main>
 
-        addBtn.addEventListener("click", addTask);
+  <script>
+    (function(){
+      const textarea = document.getElementById('message');
+      const counter = document.getElementById('counter');
+      const live = document.getElementById('charLive');
 
-        function addTask() {
-            const taskText = input.value.trim();
-            if (taskText === "") return;
+      const MAX = Number(getComputedStyle(document.documentElement).getPropertyValue('--max-chars')) || 100;
 
-            createTaskElement(taskText);
-            input.value = "";
-        }
-
+      
+      function updateCounter(){
+        let len = textarea.value.length;
         
-        function createTaskElement(text) {
-            const li = document.createElement("li");
-
-            const span = document.createElement("span");
-            span.textContent = text;
-
-            
-            const editBtn = document.createElement("button");
-            editBtn.textContent = "Edit";
-            editBtn.onclick = function () {
-                const newText = prompt("Edit task:", span.textContent);
-                if (newText) {
-                    span.textContent = newText;
-                }
-            };
-
-            
-            const delBtn = document.createElement("button");
-            delBtn.textContent = "Delete";
-            delBtn.onclick = function () {
-                taskList.removeChild(li);
-            };
-
-            li.appendChild(span);
-            li.appendChild(editBtn);
-            li.appendChild(delBtn);
-
-            taskList.appendChild(li);
+        if(len > MAX){
+          textarea.value = textarea.value.slice(0, MAX);
+          len = MAX;
         }
-    </script>
+        const remaining = MAX - len;
 
+        counter.textContent = `Characters left: ${remaining}`;
+        live.textContent = `Characters left ${remaining}`; 
+        
+        const pctLeft = remaining / MAX;
+        counter.classList.remove('green','orange','red');
+        if(pctLeft <= 0.10){
+          counter.classList.add('red');
+        } else if(pctLeft <= 0.30){
+          counter.classList.add('orange');
+        } else {
+          counter.classList.add('green');
+        }
+      }
+
+     
+      textarea.addEventListener('input', updateCounter);
+
+      
+      textarea.addEventListener('keydown', function(e){
+        const len = textarea.value.length;
+        
+        const navigationKeys = ['Backspace','Delete','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Tab'];
+        const isModifier = e.ctrlKey || e.metaKey || e.altKey;
+        if(len >= MAX && !navigationKeys.includes(e.key) && !isModifier && !window.getSelection().toString()){
+          
+          e.preventDefault();
+        }
+      });
+
+      
+      updateCounter();
+
+    })();
+  </script>
 </body>
 </html>
