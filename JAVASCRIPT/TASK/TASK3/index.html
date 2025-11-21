@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Carousel</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            background: #e2cdcd;
+        }
+
+        .carousel {
+            width: 600px;
+            height: 350px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 10px 15px;
+            border: none;
+            font-size: 25px;
+            background: white;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        .btn:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="carousel" id="carousel">
+    <img id="slide" src="" alt="carousel image">
+
+    <button class="btn prev" id="prevBtn">⟨</button>
+    <button class="btn next" id="nextBtn">⟩</button>
+</div>
+
+
+<script>
+   
+    let images = [
+        "https://plus.unsplash.com/premium_photo-1664300792059-863ccfe55932?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9yZXN0fGVufDB8fDB8fHww",
+        "https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9yZXN0fGVufDB8fDB8fHww",
+        "https://plus.unsplash.com/premium_photo-1669613233557-1676c121fe73?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Zm9yZXN0fGVufDB8fDB8fHww",
+        "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGZvcmVzdHxlbnwwfHwwfHx8MA%3D%3D",
+        "https://media.istockphoto.com/id/2178732378/photo/autumn-landscape-with-pine-forest-tree-trunks-illuminated-by-sunlight.webp?a=1&b=1&s=612x612&w=0&k=20&c=6zFsCCVcyWzpPhRkccP2EXerLC1Nvgb61KnOaFg7Xwg="
+    ];
+
+    let index = 0;
+    let slide = document.getElementById("slide");
+    let carousel = document.getElementById("carousel");
+
+    
+    slide.src = images[index];
+
+    
+    function nextImage() {
+        index = (index + 1) % images.length;
+        slide.src = images[index];
+    }
+
+   
+    function prevImage() {
+        index = (index - 1 + images.length) % images.length;
+        slide.src = images[index];
+    }
+
+    
+    document.getElementById("nextBtn").addEventListener("click", nextImage);
+    document.getElementById("prevBtn").addEventListener("click", prevImage);
+
+    
+    let autoSlide = setInterval(nextImage, 3000);
+
+    
+    carousel.addEventListener("mouseover", () => clearInterval(autoSlide));
+
+    carousel.addEventListener("mouseout", () => {
+        autoSlide = setInterval(nextImage, 3000);
+    });
+</script>
+
+</body>
+</html>
