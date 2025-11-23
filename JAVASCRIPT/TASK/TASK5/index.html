@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Filter</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            margin-right: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+        #products {
+            margin-top: 20px;
+        }
+        .product-item {
+            padding: 8px;
+            background: #f2f2f2;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 8px;
+            width: 250px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Interactive Product Filter</h2>
+
+    
+    <button onclick="filterProducts('all')">All</button>
+    <button onclick="filterProducts('electronics')">Electronics</button>
+    <button onclick="filterProducts('clothing')">Clothing</button>
+
+    
+    <br><br>
+    <input type="text" id="searchBox" placeholder="Search product..." onkeyup="searchProducts()">
+
+    <div id="products"></div>
+
+    <script>
+        
+        const products = [
+            { name: "Laptop", category: "electronics" },
+            { name: "Smartphone", category: "electronics" },
+            { name: "Headphones", category: "electronics" },
+            { name: "T-Shirt", category: "clothing" },
+            { name: "Jeans", category: "clothing" },
+            { name: "Jacket", category: "clothing" },
+            { name: "Novel Book", category: "books" },
+            { name: "Charger", category: "electronics" },
+            { name: "Sweater", category: "clothing" },
+            { name: "Router", category: "electronics" }
+        ];
+
+        const productsDiv = document.getElementById("products");
+
+        
+        displayProducts(products);
+
+        
+        function displayProducts(list) {
+            productsDiv.innerHTML = "";
+            list.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "product-item";
+                div.innerText = item.name + " (" + item.category + ")";
+                productsDiv.appendChild(div);
+            });
+        }
+
+        
+        function filterProducts(cat) {
+            let filtered;
+
+            if (cat === "all") {
+                filtered = products;
+            } else {
+                filtered = products.filter(p => p.category === cat);
+            }
+
+            displayProducts(filtered);
+        }
+
+        
+        function searchProducts() {
+            const keyword = document.getElementById("searchBox").value.toLowerCase();
+
+            const filtered = products.filter(p =>
+                p.name.toLowerCase().includes(keyword)
+            );
+
+            displayProducts(filtered);
+        }
+    </script>
+
+</body>
+</html>
